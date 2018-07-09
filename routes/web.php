@@ -1,13 +1,14 @@
 <?php
 
+use App\Task;
 
 Route::get('/', function () {
-    $tasks = DB::table('tasks')->get();
+    // $tasks = Task::where('completed', 1)->get(); // completed: where completed = '1'
+    $tasks = Task::completed()->get(); // completed: where completed = '1'
+    // $tasks = Task::incomplete()->get(); // completed: where completed = '1'
     return view('welcome', compact('tasks'));
 });
 
 Route::get('tasks/{id}', function ($id) {
-    $task = DB::table('tasks')->find($id);
-
-    return json_decode(json_encode($task), true);
+    return Task::find($id);
 });
