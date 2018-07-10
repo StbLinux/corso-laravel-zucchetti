@@ -16,5 +16,7 @@ $factory->define(App\Post::class, function (Faker $faker) {
         'category_id' => function () {
             return factory(App\Category::class)->create()->id;
         },
+
+        'created_at' => $faker->dateTimeBetween('-2 years'),
     ];
 });

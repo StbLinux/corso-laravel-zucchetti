@@ -6,6 +6,16 @@ use Illuminate\Database\Eloquent\Model;
 
 class Post extends Model
 {
+    // public function getRouteKeyName()
+    // {
+    //     return 'slug';
+    // }
+
+    // protected $casts = [
+    //     'emailed_at' => 'datetime',
+    //     'altraProp' => 'int',
+    // ];
+
     // appartiene a 1 User // user() // belongsTo
     public function user()
     {
