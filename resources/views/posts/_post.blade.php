@@ -6,6 +6,10 @@
                 <small>posted by <strong>{{ $post->user->name }}</strong></small>
                 <small>in <em>{{ $post->category->name }}</em></small>
                 <small>on {{ $post->created_at->format('d/m/Y H:i') }}</small>
+
+                @can('update', $post)
+                    <small><a href="{{ route('posts.edit', $post) }}">Edit</a></small>
+                @endcan
             </div>
             <div class="card-body">
                 <p>

@@ -5,10 +5,15 @@ namespace App\Http\Controllers;
 use App\Tag;
 use App\Post;
 use App\Category;
-use Illuminate\Http\Request;
+use App\Http\Requests\PostRequest;
 
 class PostsController extends Controller
 {
+    public function __construct()
+    {
+        $this->middleware('auth')->except('index', 'show');
+    }
+
     public function index()
     {
         $posts = Post::with('comments.user', 'user', 'category', 'tags')->latest()->paginate(15);
@@ -28,19 +33,47 @@ class PostsController extends Controller
         $categories = Category::orderBy('name')->get();
         $tags = Tag::orderBy('name')->get();
 
-        return view('posts.create', compact('categories', 'tags'));
+        $post = new Post;
+
+        return view('posts.create', compact('post', 'categories', 'tags'));
     }
 
-    public function store(Request $request)
+    public function store(PostRequest $request)
     {
-        $postData = $request->only('title', 'category_id', 'preview', 'body');
-        $postData['user_id'] = auth()->id();
-
-        $post = Post::create($postData);
-        // $post = Post::forceCreate($postData);
+        $post = auth()->user()->posts()->create($request->validated());
 
         $post->tags()->sync($request->tags);
 
-        return $post;
+        return redirect()->route('posts.show', $post);
+    }
+
+    public function edit(Post $post)
+    {
+        $this->authorize('update', $post);
+
+        $categories = Category::orderBy('name')->get();
+        $tags = Tag::orderBy('name')->get();
+
+        return view('posts.edit', compact('post', 'categories', 'tags'));
+    }
+
+    public function update(Post $post, PostRequest $request)
+    {
+        $this->authorize('update', $post);
+
+        $post->update($request->validated());
+
+        $post->tags()->sync($request->tags);
+        return redirect()->route('posts.show', $post);
+    }
+
+    public function destroy(Post $post)
+    {
+        $this->authorize('delete', $post);
+
+        $post->tags()->sync([]);
+        $post->delete();
+
+        return redirect('/');
     }
 }
