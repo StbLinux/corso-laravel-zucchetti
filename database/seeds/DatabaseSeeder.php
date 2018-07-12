@@ -11,13 +11,23 @@ class DatabaseSeeder extends Seeder
      */
     public function run()
     {
+
         // 20 Category
         $categories = factory(App\Category::class, 20)->create();
         // 40 Tag
         $tags = factory(App\Tag::class, 40)->create();
 
         // 10 User
-        $users = factory(App\User::class, 10)->create();
+        factory(App\User::class)->create([
+            'name' => 'Sid',
+            'email' => 'forge405@gmail.com',
+            'role' => 'admin',
+            'password' => bcrypt(env('INITIAL_PASS', 'secret')),
+        ]);
+        factory(App\User::class, 9)->create();
+
+        // 10 User
+        $users = App\User::all();
 
         // Ciascun User 15 Post
         foreach ($users as $user) {

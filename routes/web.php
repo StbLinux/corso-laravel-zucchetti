@@ -1,7 +1,14 @@
 <?php
 
 Route::get('/', 'PostsController@index')->name('posts.index'); //posts
+
+Route::get('posts/create', 'PostsController@create')->name('posts.create');
+Route::post('posts', 'PostsController@store')->name('posts.store');
+
 Route::get('posts/{post}', 'PostsController@show')->name('posts.show');
+
+// Route::get('posts/{post}', 'PostsController@show')->name('posts.show')->where('post', '[0-9]');
+
 
 // REST
 // Create, Read, Update, Delete - CRUD

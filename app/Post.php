@@ -6,6 +6,9 @@ use Illuminate\Database\Eloquent\Model;
 
 class Post extends Model
 {
+    protected $guarded = [];
+    // protected $fillable = [];
+
     // public function getRouteKeyName()
     // {
     //     return 'slug';
@@ -38,5 +41,29 @@ class Post extends Model
     public function comments()
     {
         return $this->morphMany(Comment::class, 'commentable');
+    }
+
+    // getters - accessors - modifica un dato prima di essere restituito all'utente
+    // public function getTitleAttribute($title)
+    // {
+    //     return strtoupper($title);
+    // }
+
+    // setters = mutators - modifica un dato prima di essere salvato nel db
+    public function setTitleAttribute($title)
+    {
+        $this->attributes['title'] = $title;
+        $this->attributes['slug'] = $this->makeSlugFrom($title);
+    }
+
+    private function makeSlugFrom($title)
+    {
+        $slug = str_slug($title);
+
+        // trova posts con lo stesso slug,
+        // se 0 riturna slug
+        // se >0 ritorna num+1
+
+        return $slug;
     }
 }
