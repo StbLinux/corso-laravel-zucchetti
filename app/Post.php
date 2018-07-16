@@ -7,17 +7,6 @@ use Illuminate\Database\Eloquent\Model;
 class Post extends Model
 {
     protected $guarded = [];
-    // protected $fillable = [];
-
-    // public function getRouteKeyName()
-    // {
-    //     return 'slug';
-    // }
-
-    // protected $casts = [
-    //     'emailed_at' => 'datetime',
-    //     'altraProp' => 'int',
-    // ];
 
     // appartiene a 1 User // user() // belongsTo
     public function user()
@@ -43,11 +32,11 @@ class Post extends Model
         return $this->morphMany(Comment::class, 'commentable');
     }
 
-    // getters - accessors - modifica un dato prima di essere restituito all'utente
-    // public function getTitleAttribute($title)
-    // {
-    //     return strtoupper($title);
-    // }
+
+    public function getCoverAttribute($cover)
+    {
+        return '/storage/' . (($cover) ?? 'covers/default.jpg'); //null coalescence operator
+    }
 
     // setters = mutators - modifica un dato prima di essere salvato nel db
     public function setTitleAttribute($title)
@@ -56,12 +45,17 @@ class Post extends Model
         $this->attributes['slug'] = $this->makeSlugFrom($title);
     }
 
+    public function setCoverAttribute($cover)
+    {
+        $this->attributes['cover'] = $cover->store('covers');
+    }
+
     private function makeSlugFrom($title)
     {
         $slug = str_slug($title);
 
         // trova posts con lo stesso slug,
-        // se 0 riturna slug
+        // se 0 ritorna slug
         // se >0 ritorna num+1
 
         return $slug;

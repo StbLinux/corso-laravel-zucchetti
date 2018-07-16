@@ -28,6 +28,7 @@ class PostRequest extends FormRequest
             'category_id' => 'required|exists:categories,id',
             'preview' => 'required|min:3',
             'body' => 'required|min:3',
+            'cover' => 'sometimes|mimes:jpeg,bmp,png',
         ];
     }
 }

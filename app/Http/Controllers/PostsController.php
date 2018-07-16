@@ -64,16 +64,14 @@ class PostsController extends Controller
         $post->update($request->validated());
 
         $post->tags()->sync($request->tags);
+
         return redirect()->route('posts.show', $post);
     }
 
     public function destroy(Post $post)
     {
         $this->authorize('delete', $post);
-
-        $post->tags()->sync([]);
         $post->delete();
-
         return redirect('/');
     }
 }

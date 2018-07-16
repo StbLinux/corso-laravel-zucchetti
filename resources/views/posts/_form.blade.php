@@ -6,6 +6,13 @@
     </div>
 
     <div class="form-group">
+        <label for="cover">Cover</label>
+        <input type="file" name="cover" class="form-control{{ $errors->has('cover') ? ' is-invalid' : '' }}">
+
+        @include('layouts.validation_feedback', ['field' => 'cover'])
+    </div>
+
+    <div class="form-group">
         <label for="category_id">Category</label>
         <select name="category_id" class="form-control{{ $errors->has('category_id') ? ' is-invalid' : '' }}">
             <option></option>
