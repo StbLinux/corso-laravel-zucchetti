@@ -2,9 +2,8 @@
 
 namespace App\Http\Controllers;
 
-use App\Tag;
 use App\Post;
-use App\Category;
+use Carbon\Carbon;
 use App\Http\Requests\PostRequest;
 
 class PostsController extends Controller
@@ -16,7 +15,17 @@ class PostsController extends Controller
 
     public function index()
     {
-        $posts = Post::with('comments.user', 'user', 'category', 'tags')->latest()->paginate(15);
+        $posts = Post::with('comments.user', 'user', 'category', 'tags')->latest();
+
+        if ($year = request('year')) {
+            $posts->whereYear('created_at', $year);
+        }
+
+        if ($month = request('month')) {
+            $posts->whereMonth('created_at', Carbon::parse($month)->month);
+        }
+
+        $posts = $posts->paginate(15);
 
         return view('posts.index', compact('posts'));
     }
@@ -30,12 +39,7 @@ class PostsController extends Controller
 
     public function create()
     {
-        $categories = Category::orderBy('name')->get();
-        $tags = Tag::orderBy('name')->get();
-
-        $post = new Post;
-
-        return view('posts.create', compact('post', 'categories', 'tags'));
+        return view('posts.create')->withPost(new Post);
     }
 
     public function store(PostRequest $request)
@@ -44,17 +48,13 @@ class PostsController extends Controller
 
         $post->tags()->sync($request->tags);
 
-        return redirect()->route('posts.show', $post);
+        return redirect()->route('posts.show', $post)->withType('success')->withStatus('The post was created.');
     }
 
     public function edit(Post $post)
     {
         $this->authorize('update', $post);
-
-        $categories = Category::orderBy('name')->get();
-        $tags = Tag::orderBy('name')->get();
-
-        return view('posts.edit', compact('post', 'categories', 'tags'));
+        return view('posts.edit', compact('post'));
     }
 
     public function update(Post $post, PostRequest $request)
@@ -65,13 +65,13 @@ class PostsController extends Controller
 
         $post->tags()->sync($request->tags);
 
-        return redirect()->route('posts.show', $post);
+        return redirect()->route('posts.show', $post)->withType('warning')->withStatus('The post was updated.');
     }
 
     public function destroy(Post $post)
     {
         $this->authorize('delete', $post);
         $post->delete();
-        return redirect('/');
+        return redirect('/')->withType('danger')->withStatus('The post was deleted.');
     }
 }

@@ -60,4 +60,18 @@ class Post extends Model
 
         return $slug;
     }
+
+    public function tagLinks()
+    {
+        // $tagLinks = [];
+
+        // foreach ($this->tags as $tag) {
+        //     $tagLinks[] = "<a href='" . route('tags.show', $tag) .  "'>#" . $tag->name .  '</a>';
+        // }
+        // return join(', ', $tagLinks);
+
+        return $this->tags->map(function ($tag) {
+            return "<a href='" . route('tags.show', $tag) .  "'>#" . $tag->name .  '</a>';
+        })->implode(', ');
+    }
 }

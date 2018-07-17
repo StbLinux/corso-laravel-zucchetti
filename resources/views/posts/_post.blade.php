@@ -5,7 +5,7 @@
             <div class="card-header">
                 <h5><a href="{{ route('posts.show', $post) }}">{{ $post->title }}</a></h5>
                 <small>posted by <strong>{{ $post->user->name }}</strong></small>
-                <small>in <em>{{ $post->category->name }}</em></small>
+                <small>in <em><a href="{{ route('categories.show', $post->category) }}">{{ $post->category->name }}</a></em></small>
                 <small>on {{ $post->created_at->format('d/m/Y H:i') }}</small>
 
                 @can('update', $post)
@@ -25,7 +25,7 @@
 
             </div>
             <div class="card-footer">
-                <small>Tags: <em>{{ $post->tags->pluck('name')->implode(', ') }}</em></small>
+                <small><em>{!! $post->tagLinks() !!}</em></small>
             </div>
         </div>
     </div>

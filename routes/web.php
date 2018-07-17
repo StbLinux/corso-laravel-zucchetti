@@ -2,6 +2,10 @@
 
 Route::get('/', 'PostsController@index')->name('posts.index');
 Route::resource('posts', 'PostsController')->except('index');
+
+Route::get('categories/{category}', 'CategoriesController@show')->name('categories.show');
+Route::get('tags/{tag}', 'TagsController@show')->name('tags.show');
+
 Auth::routes();
 
 // Route::get('/', 'PostsController@index')->name('posts.index');

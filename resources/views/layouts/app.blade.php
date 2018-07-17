@@ -79,10 +79,11 @@
             <div class="container">
                 <div class="row">
                     <div class="col-md-9">
+                        @include('layouts.feedback')
                         @yield('content')
                     </div>
                     <div class="col-md-3">
-                        <h4>Sidebar</h4>
+                        @include('sidebar.main')
                     </div>
                 </div>
             </div>
