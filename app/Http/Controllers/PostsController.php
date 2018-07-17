@@ -11,6 +11,7 @@ class PostsController extends Controller
     public function __construct()
     {
         $this->middleware('auth')->except('index', 'show');
+        // $this->middleware('custom.maintenance')->except('index', 'show');
     }
 
     public function index()
