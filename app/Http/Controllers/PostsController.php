@@ -48,7 +48,7 @@ class PostsController extends Controller
 
         $post->tags()->sync($request->tags);
 
-        return redirect()->route('posts.show', $post)->withType('success')->withStatus('The post was created.');
+        return redirect()->route('posts.show', $post)->withSuccess('The post was created.');
     }
 
     public function edit(Post $post)
@@ -65,13 +65,13 @@ class PostsController extends Controller
 
         $post->tags()->sync($request->tags);
 
-        return redirect()->route('posts.show', $post)->withType('warning')->withStatus('The post was updated.');
+        return redirect()->route('posts.show', $post)->withNotice('The post was updated.');
     }
 
     public function destroy(Post $post)
     {
         $this->authorize('delete', $post);
         $post->delete();
-        return redirect('/')->withType('danger')->withStatus('The post was deleted.');
+        return redirect('/')->withError('The post was deleted.');
     }
 }
