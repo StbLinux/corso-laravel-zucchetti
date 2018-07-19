@@ -3,7 +3,6 @@
 namespace App\Exceptions;
 
 use Exception;
-use Illuminate\Auth\Access\AuthorizationException;
 use Illuminate\Foundation\Exceptions\Handler as ExceptionHandler;
 
 class Handler extends ExceptionHandler
@@ -49,9 +48,29 @@ class Handler extends ExceptionHandler
      */
     public function render($request, Exception $exception)
     {
-        // if ($exception instanceof AuthorizationException) {
-        //     return redirect('/');
-        // }
+        if ($exception instanceof \Illuminate\Validation\ValidationException && ! strpos($request->header('accept'), 'html')) {
+            return response()->json([
+                'response' => 'error',
+                'message' => [
+                    'summary' => $exception->getMessage(),
+                    'failed' => $exception->validator->errors()->all(),
+                ],
+            ]);
+        }
+
+        if ($exception instanceof \Illuminate\Auth\Access\AuthorizationException && ! strpos($request->header('accept'), 'html')) {
+            return response()->json([
+                'response' => 'error',
+                'message' => $exception->getMessage(),
+            ]);
+        }
+
+        if ($exception instanceof \Symfony\Component\HttpKernel\Exception\UnauthorizedHttpException && ($request->wantsJson() || $request->ajax())) {
+            return response()->json([
+                'response' => 'error',
+                'message' => $exception->getMessage(),
+            ]);
+        }
 
         return parent::render($request, $exception);
     }

@@ -80,6 +80,11 @@ return [
 
     'locale' => 'en',
 
+    'locales' => [
+        'it' => 'Italiano',
+        'en' => 'English',
+    ],
+
     /*
     |--------------------------------------------------------------------------
     | Application Fallback Locale
@@ -91,7 +96,7 @@ return [
     |
     */
 
-    'fallback_locale' => 'en',
+    'fallback_locale' => 'it',
 
     /*
     |--------------------------------------------------------------------------
@@ -150,6 +155,7 @@ return [
         /*
          * Package Service Providers...
          */
+        Spiritix\LadaCache\LadaCacheServiceProvider::class,
 
         /*
          * Application Service Providers...

@@ -6,6 +6,8 @@ use Illuminate\Database\Eloquent\Model;
 
 class Comment extends Model
 {
+    use \Spiritix\LadaCache\Database\LadaCacheTrait;
+
     public function commentable()
     {
         return $this->morphTo();

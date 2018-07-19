@@ -6,6 +6,8 @@ use Illuminate\Database\Eloquent\Model;
 
 class Post extends Model
 {
+    use \Spiritix\LadaCache\Database\LadaCacheTrait;
+
     protected $guarded = [];
 
     // appartiene a 1 User // user() // belongsTo

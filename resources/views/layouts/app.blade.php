@@ -17,8 +17,8 @@
     <link href="https://fonts.googleapis.com/css?family=Raleway:300,400,600" rel="stylesheet" type="text/css">
 
     <!-- Styles -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.5/css/select2.min.css" />
-    <link href="{{ asset('css/app.css') }}" rel="stylesheet">
+    <link href="{{ mix('css/app.css') }}" rel="stylesheet">
+    @yield('css')
 </head>
 <body>
     <div id="app">
@@ -44,6 +44,15 @@
                     <!-- Right Side Of Navbar -->
                     <ul class="navbar-nav ml-auto">
                         <!-- Authentication Links -->
+
+                        @foreach(config('app.locales') as $locale => $label)
+                            <li class="nav-item">
+                                <a class="nav-link {{ (app()->isLocale($locale)) ? 'active' : ''}}" href="{{ switchLanguageInUrlWith($locale) }}">
+                                    {{ $label }}
+                                </a>
+                            </li>
+                        @endforeach
+
                         @guest
                             <li class="nav-item">
                                 <a class="nav-link" href="{{ route('login') }}">{{ __('Login') }}</a>
@@ -91,11 +100,8 @@
     </div>
 
     <!-- Scripts -->
-    <script src="{{ asset('js/app.js') }}"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.5/js/select2.full.min.js"></script>
+    <script src="{{ mix('js/app.js') }}"></script>
 
-    <script>
-        $('select').select2({});
-    </script>
+    @yield('js')
 </body>
 </html>

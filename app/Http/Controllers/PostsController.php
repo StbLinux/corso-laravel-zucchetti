@@ -3,37 +3,30 @@
 namespace App\Http\Controllers;
 
 use App\Post;
-use Carbon\Carbon;
+use Illuminate\Http\Request;
 use App\Http\Requests\PostRequest;
+use App\Repositories\PostRepository;
 
 class PostsController extends Controller
 {
-    public function __construct()
+    protected $postRepo;
+
+    public function __construct(PostRepository $postRepo)
     {
         $this->middleware('auth')->except('index', 'show');
-        // $this->middleware('custom.maintenance')->except('index', 'show');
+        $this->postRepo = $postRepo;
     }
 
-    public function index()
+    public function index(Request $request)
     {
-        $posts = Post::with('comments.user', 'user', 'category', 'tags')->latest();
-
-        if ($year = request('year')) {
-            $posts->whereYear('created_at', $year);
-        }
-
-        if ($month = request('month')) {
-            $posts->whereMonth('created_at', Carbon::parse($month)->month);
-        }
-
-        $posts = $posts->paginate(15);
+        $posts = $this->postRepo->getAllPaginated($request, 15);
 
         return view('posts.index', compact('posts'));
     }
 
     public function show(Post $post)
     {
-        $post->load('comments.user', 'user', 'category', 'tags');
+        $post = $this->postRepo->loadWithRelations($post);
 
         return view('posts.show', compact('post'));
     }
@@ -45,9 +38,7 @@ class PostsController extends Controller
 
     public function store(PostRequest $request)
     {
-        $post = auth()->user()->posts()->create($request->validated());
-
-        $post->tags()->sync($request->tags);
+        $post = $this->postRepo->createPostFrom($request);
 
         return redirect()->route('posts.show', $post)->withSuccess('The post was created.');
     }
@@ -62,9 +53,7 @@ class PostsController extends Controller
     {
         $this->authorize('update', $post);
 
-        $post->update($request->validated());
-
-        $post->tags()->sync($request->tags);
+        $post = $this->postRepo->updatePostFrom($post, $request);
 
         return redirect()->route('posts.show', $post)->withNotice('The post was updated.');
     }
@@ -72,7 +61,9 @@ class PostsController extends Controller
     public function destroy(Post $post)
     {
         $this->authorize('delete', $post);
-        $post->delete();
+
+        $this->postRepo->deletePost($post);
+
         return redirect('/')->withError('The post was deleted.');
     }
 }
