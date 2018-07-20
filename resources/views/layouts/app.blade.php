@@ -38,6 +38,10 @@
                             <li class="nav-item">
                                 <a class="nav-link" href="{{ route('posts.create') }}">+ New Post</a>
                             </li>
+
+                            <li class="nav-item">
+                                <a class="nav-link" href="/tokens">Manage Tokens</a>
+                            </li>
                         @endauth
                     </ul>
 

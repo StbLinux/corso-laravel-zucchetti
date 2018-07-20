@@ -13,6 +13,46 @@ Route::group(['as' => 'api.', 'namespace' => 'Api'], function () {
     });
 });
 
+// Route::get('passport-test/user', function () {
+//     return request()->user();
+// })->middleware('auth:api');
+
+
+/*
+ * Laravel Passport Client Routes Implementation
+ */
+
+
+// use Illuminate\Http\Request;
+
+// Route::get('/redirect', function () {
+//     $query = http_build_query([
+//         'client_id' => 3,
+//         'redirect_uri' => 'https://corso-laravel-oauth2-client.dev/callback',
+//         'response_type' => 'code',
+//         // 'scope' => '',
+//     ]);
+
+//     return redirect('https://corso-laravel.dev/oauth/authorize?'.$query);
+// });
+
+
+// Route::get('/callback', function (Request $request) {
+//     // composer require guzzlehttp/guzzle -vvv
+//     $http = new GuzzleHttp\Client;
+
+//     $response = $http->post('https://corso-laravel.dev/oauth/token', [
+//         'form_params' => [
+//             'grant_type' => 'authorization_code',
+//             'client_id' => 3,
+//             'client_secret' => 'Jh6rsGExmk06jT8lTWX82sCIA0a7A7CK0bMiVn4q',
+//             'redirect_uri' => 'https://corso-laravel-oauth2-client.dev/callback',
+//             'code' => $request->code,
+//         ],
+//     ]);
+
+//     return json_decode((string) $response->getBody(), true);
+// });
 
 
 // use Illuminate\Http\Request;

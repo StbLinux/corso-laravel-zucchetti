@@ -25,9 +25,12 @@ class AppServiceProvider extends ServiceProvider
 
             $tags = Tag::whereHas('posts')->withCount('posts')->get();
 
-
-            $archive = Post::selectRaw('year(created_at) year, monthname(created_at) month, count(*) published')
-            ->groupBy('year', 'month')->orderByRaw('min(created_at) DESC')->get();
+            if (app()->environment('testing')) {
+                $archive = [];
+            } else {
+                $archive = Post::selectRaw('year(created_at) year, monthname(created_at) month, count(*) published')
+                ->groupBy('year', 'month')->orderByRaw('min(created_at) DESC')->get();
+            }
 
             $view->with('categories', $categories)->with('tags', $tags)->with('archive', $archive);
         });

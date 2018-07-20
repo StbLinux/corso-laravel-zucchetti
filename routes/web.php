@@ -6,6 +6,8 @@ Route::resource('posts', 'PostsController')->except('index');
 Route::get('categories/{category}', 'CategoriesController@show')->name('categories.show');
 Route::get('tags/{tag}', 'TagsController@show')->name('tags.show');
 
+Route::view('tokens', 'tokens')->middleware('auth');
+
 Auth::routes();
 
 // Route::get('/', 'PostsController@index')->name('posts.index');

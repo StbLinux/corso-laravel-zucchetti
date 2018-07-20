@@ -10,6 +10,11 @@ class Post extends Model
 
     protected $guarded = [];
 
+    // public function getRouteKeyName()
+    // {
+    //     return 'slug';
+    // }
+
     // appartiene a 1 User // user() // belongsTo
     public function user()
     {

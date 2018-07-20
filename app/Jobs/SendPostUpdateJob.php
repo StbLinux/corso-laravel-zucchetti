@@ -42,15 +42,17 @@ class SendPostUpdateJob implements ShouldQueue
         if (! ($this->currentUser->role == 'admin' && $this->currentUser->id == $author->id)) {
             $admin = User::where('role', 'admin')->first();
 
-            if ($this->currentUser->role == 'admin' && $this->currentUser->id !== $author->id) {
-                $recipient = $author;
-                $actingUser = $admin;
-            } elseif ($this->currentUser->id == $author->id) {
-                $recipient = $admin;
-                $actingUser = $author;
-            }
+            if ($admin) {
+                if ($this->currentUser->role == 'admin' && $this->currentUser->id !== $author->id) {
+                    $recipient = $author;
+                    $actingUser = $admin;
+                } elseif ($this->currentUser->id == $author->id) {
+                    $recipient = $admin;
+                    $actingUser = $author;
+                }
 
-            Mail::to($recipient)->send(new PostUpdatedEmail($recipient, $actingUser, $this->post));
+                Mail::to($recipient)->send(new PostUpdatedEmail($recipient, $actingUser, $this->post));
+            }
         }
     }
 }
