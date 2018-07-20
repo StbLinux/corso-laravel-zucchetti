@@ -54,6 +54,8 @@ class PostEditingAndDeletingTest extends TestCase
         //arrange
         list($post, $postData) = $this->createPost();
 
+        dd($post->toArray());
+
         //act
         $response = $this->patch(route('posts.update', $post), $postData);
 
@@ -87,7 +89,7 @@ class PostEditingAndDeletingTest extends TestCase
     /** @test */
     public function emailIsSentAdminOnPostUpdateByUser()
     {
-        // Mail::fake();
+        Mail::fake();
 
         //arrange
         list($post, $postData) = $this->createPost();

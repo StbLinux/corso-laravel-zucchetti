@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<coverage generated="1532084600">
-  <project timestamp="1532084600">
+<coverage generated="1532084724">
+  <project timestamp="1532084724">
     <package name="App">
       <file name="/Users/sid/Code/web/corso-laravel/app/Category.php">
         <class name="App\Category" namespace="App">
